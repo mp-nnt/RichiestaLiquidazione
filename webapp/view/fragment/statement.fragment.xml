@@ -1,0 +1,28 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core">
+	<f:Form editable="true" id="statementForm" width="100%">
+		<f:layout>
+			<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4"
+				emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="true"/>
+		</f:layout>
+		<f:formContainers>
+			<f:FormContainer title="{i18n>settlementClaim}">
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<FormattedText htmlText="{i18n>settlementClaimText}" width="100%"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+			<f:FormContainer title="{i18n>undertakes}">
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<FormattedText htmlText="{i18n>undertakesText}" width="100%"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+		</f:formContainers>
+	</f:Form>
+</core:FragmentDefinition>

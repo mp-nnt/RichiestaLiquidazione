@@ -1,0 +1,72 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:t="sap.ui.table" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core">
+	<f:Form editable="true" id="investmentForm" width="100%">
+		<f:layout>
+			<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4"
+				emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+		</f:layout>
+		<f:formContainers>
+			<f:FormContainer>
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<t:Table rows="{/Settlement}" title="{i18n>SettlementTable}" selectionMode="None">
+								<t:columns>
+									<t:Column>
+										<Label text="Fornitore/istituto locatore"/>
+										<t:template>
+											<Input value="{fornitore}"/>
+										</t:template>
+									</t:Column>
+									<t:Column>
+										<Label text="Descrizione"/>
+										<t:template>
+											<Input value="{descrizione}"/>
+										</t:template>
+									</t:Column>
+									<t:Column>
+										<Label text="nr. fattura/contratto"/>
+										<t:template>
+											<Input value="{fattura}"/>
+										</t:template>
+									</t:Column>
+									<t:Column>
+										<Label text="data"/>
+										<t:template>
+											<Input value="{dataS}"/>
+										</t:template>
+									</t:Column>
+									<t:Column>
+										<Label text="Imponibile Euro"/>
+										<t:template>
+											<Input value="{imponibile}"/>
+										</t:template>
+									</t:Column>
+								</t:columns>
+							</t:Table>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+			<f:FormContainer title="{i18n>privacy}">
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<FormattedText htmlText="{i18n>privacyText}" width="100%"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>date}">
+						<f:fields>
+							<Input width="50%" id="luogo" value="{/luogoSettlement}"/>
+							<Input width="50%" id="data" value="{/dataSettlement}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>signature}">
+						<f:fields>
+							<Input width="50%" id="signature" value="{/signatureSettlement}"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+		</f:formContainers>
+	</f:Form>
+</core:FragmentDefinition>

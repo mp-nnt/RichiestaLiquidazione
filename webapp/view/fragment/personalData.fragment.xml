@@ -1,0 +1,127 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core">
+	<f:Form editable="true" id="personalDataForm" width="100%">
+		<f:layout>
+			<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4"
+				emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+		</f:layout>
+		<f:formContainers>
+			<f:FormContainer title="{i18n>undersigned}" id="undersigned">
+				<f:formElements>
+					<f:FormElement label="{i18n>surname}" id="surname_lbl">
+						<f:fields>
+							<Text id="surname_inp" text="{/surname}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>name}" id="name_lbl">
+						<f:fields>
+							<Text id="name_inp" text="{/name}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>owner}" id="owner_lbl">
+						<f:fields>
+							<Text id="owner_inp" text="{/owner}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>piva}" id="piva_lbl">
+						<f:fields>
+							<Text id="piva_inp" text="{/piva}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>fiscalCode}" id="fiscalCode_lbl">
+						<f:fields>
+							<Text id="fiscalCode_inp" text="{/fiscalCode}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>state}" id="state_lbl">
+						<f:fields>
+							<Text id="state_inp" text="{/state}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>region}" id="region_lbl">
+						<f:fields>
+							<Text id="region_inp" text="{/region}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>postCode}" id="postCode_lbl">
+						<f:fields>
+							<Text id="postCode_inp" text="{/postCode}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>city}" id="city_lbl">
+						<f:fields>
+							<Text id="city_inp" text="{/city}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>district}" id="district_lbl">
+						<f:fields>
+							<Text id="district_inp" text="{/district}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>street}" id="street_lbl">
+						<f:fields>
+							<Text id="street_inp" text="{/street}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>streetNumber}" id="streetNumber_lbl">
+						<f:fields>
+							<Text id="streetNumber_inp" text="{/streetNumber}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>telephone}" id="telephone_lbl">
+						<f:fields>
+							<Text id="telephone_inp" text="{/telephone}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>mail}" id="mail_lbl">
+						<f:fields>
+							<Text id="mail_inp" text="{/mail}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>pec}" id="pec_lbl">
+						<f:fields>
+							<Text id="pec_inp" text="{/pec}"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+			<f:FormContainer title="{i18n>claim0}" id="claim0">
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<FormattedText htmlText="{i18n>claimText0}" width="100%"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>nr}">
+						<f:fields>
+							<Input value="{/nr}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>dd}">
+						<f:fields>
+							<Input value="{/dd}"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+			<f:FormContainer title="{i18n>ask}" id="ask">
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<FormattedText htmlText="{i18n>askText}" width="100%"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>bank}" id="bank_lbl">
+						<f:fields>
+							<Input id="bank_inp" value="{/bank}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>iban}" id="iban_lbl">
+						<f:fields>
+							<Input id="iban_inp" value="{/iban}"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+		</f:formContainers>
+	</f:Form>
+</core:FragmentDefinition>
