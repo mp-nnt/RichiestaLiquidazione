@@ -32,4 +32,21 @@
 			</UploadCollectionItem>
 		</items>
 	</UploadCollection>
+	<f:Form editable="true" id="attachmentForm" width="100%">
+		<f:layout>
+			<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4"
+				emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+		</f:layout>
+		<f:formContainers>
+			<f:FormContainer title="{i18n>warnings}">
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<FormattedText htmlText="{i18n>SettlementWarnings}"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+		</f:formContainers>
+	</f:Form>
 </core:FragmentDefinition>
