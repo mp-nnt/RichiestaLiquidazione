@@ -1,0 +1,204 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:t="sap.ui.table"
+	xmlns:u="sap.ui.unified">
+	<f:Form editable="true" id="investmentForm" width="100%" class="investimento-form">
+		<f:layout>
+			<f:GridLayout singleColumn="true"/>
+		</f:layout>
+		<f:formContainers>
+			<f:FormContainer title="{i18n>tableA}">
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<t:Table selectionMode="None" rows="{/tableA}" visibleRowCount="5">
+								<t:extension>
+									<OverflowToolbar>
+										<ToolbarSpacer/>
+										<Button icon="sap-icon://add" press="addRows" type="Transparent"/>
+									</OverflowToolbar>
+								</t:extension>
+								<t:columns>
+									<t:Column sortProperty="tipologia" filterProperty="tipologia">
+										<t:multiLabels>
+											<Label text="{i18n>InvTipologia}" textAlign="Center" width="100%"/>
+										</t:multiLabels>
+										<t:template>
+											<Input value="{tipologia}" class="investimento-form-input"/>
+										</t:template>
+									</t:Column>
+									<t:Column sortProperty="inizio" filterProperty="inizio" headerSpan="2,1">
+										<t:multiLabels>
+											<Label text="{i18n>InvInF}" textAlign="Center" width="100%"/>
+											<Label text="{i18n>InvDal}" textAlign="Center" width="100%"/>
+										</t:multiLabels>
+										<t:template>
+											<DatePicker value="{path: 'inizio', type : 'sap.ui.model.odata.type.DateTime', constraints : {displayFormat : 'Date'}}" placeholder=" "
+												minDate="{date>/inizio}" maxDate="{date>/fine}" valueState="{statei}" valueStateText="{stateValuei}"/>
+										</t:template>
+									</t:Column>
+									<t:Column sortProperty="fine" filterProperty="fine">
+										<t:multiLabels>
+											<Label text="{i18n>InvInF}" textAlign="Center" width="100%"/>
+											<Label text="{i18n>Fine}" textAlign="Center" width="100%"/>
+										</t:multiLabels>
+										<t:template>
+											<DatePicker value="{path: 'fine', type : 'sap.ui.model.odata.type.DateTime', constraints : {displayFormat : 'Date'}}" placeholder=" "
+												minDate="{date>/inizio}" maxDate="{date>/fine}" valueState="{statef}" valueStateText="{stateValuef}"/>
+										</t:template>
+									</t:Column>
+									<t:Column sortProperty="importoEuro" filterProperty="importoEuro">
+										<t:multiLabels>
+											<Label text="{i18n>InvImpEuro}" textAlign="Center" width="100%"/>
+										</t:multiLabels>
+										<t:template>
+											<Input value="{path:'importoEuro', type:'sap.ui.model.type.Currency'}" textAlign="Right" change="onTableAChange"
+												class="investimento-form-input"/>
+										</t:template>
+									</t:Column>
+								</t:columns>
+							</t:Table>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement>
+						<f:fields>
+							<u:Currency value="{/totalA}" currency="EUR" useSymbol="true" class="investimento-form-currency"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+			<f:FormContainer title="{i18n>tableB}">
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<t:Table selectionMode="None" rows="{/tableB}" visibleRowCount="9">
+								<t:columns>
+									<t:Column sortProperty="tipologia" filterProperty="tipologia">
+										<t:multiLabels>
+											<Label text="{i18n>InvTipologia_1}" textAlign="Center" width="100%"/>
+										</t:multiLabels>
+										<t:template>
+											<Text text="{tipologia}"/>
+										</t:template>
+									</t:Column>
+									<t:Column sortProperty="luogo" filterProperty="luogo">
+										<t:multiLabels>
+											<Label text="{i18n>Luogo}" textAlign="Center" width="100%"/>
+										</t:multiLabels>
+										<t:template>
+											<Input value="{luogo}" class="investimento-form-input"/>
+										</t:template>
+									</t:Column>
+									<t:Column sortProperty="inizio" filterProperty="inizio" headerSpan="2,1">
+										<t:multiLabels>
+											<Label text="{i18n>InvInF}" textAlign="Center" width="100%"/>
+											<Label text="{i18n>InvDal}" textAlign="Center" width="100%"/>
+										</t:multiLabels>
+										<t:template>
+											<DatePicker value="{path: 'inizio', type : 'sap.ui.model.odata.type.DateTime', constraints : {displayFormat : 'Date'}}" placeholder=" "
+												minDate="{date>/inizio}" maxDate="{date>/fine}" valueState="{statei}" valueStateText="{stateValuei}"/>
+										</t:template>
+									</t:Column>
+									<t:Column sortProperty="fine" filterProperty="fine">
+										<t:multiLabels>
+											<Label text="{i18n>InvInF}" textAlign="Center" width="100%"/>
+											<Label text="{i18n>InvFine}" textAlign="Center" width="100%"/>
+										</t:multiLabels>
+										<t:template>
+											<DatePicker value="{path: 'fine', type : 'sap.ui.model.odata.type.DateTime', constraints : {displayFormat : 'Date'}}" placeholder=" "
+												minDate="{date>/inizio}" maxDate="{date>/fine}" valueState="{statef}" valueStateText="{stateValuef}"/>
+										</t:template>
+									</t:Column>
+									<t:Column sortProperty="importoEuro" filterProperty="importoEuro">
+										<t:multiLabels>
+											<Label text="{i18n>InvImpEuro}" textAlign="Center" width="100%"/>
+										</t:multiLabels>
+										<t:template>
+											<Input value="{path:'importoEuro', type:'sap.ui.model.type.Currency'}" textAlign="Right" change="onTableBChange"
+												class="investimento-form-input"/>
+										</t:template>
+									</t:Column>
+								</t:columns>
+							</t:Table>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement>
+						<f:fields>
+							<u:Currency value="{/totalB}" currency="EUR" useSymbol="true" class="investimento-form-currency"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+			<f:FormContainer>
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<FormattedText htmlText="{i18n>invText}" width="100%"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+			<f:FormContainer title="{i18n>claim}">
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<VBox>
+								<FormattedText htmlText="{i18n>claimText3}" width="100%"/>
+								<RadioButtonGroup class="sapUiMediumMarginBottom" id="grp" columns="2">
+									<buttons>
+										<RadioButton text="{i18n>yes}" selected="{/claimYes}" groupName="gr"/>
+										<RadioButton text="{i18n>no}" selected="{/claimNo}" groupName="gr"/>
+									</buttons>
+								</RadioButtonGroup>
+							</VBox>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+			<f:FormContainer title="{i18n>stamp_duty}">
+				<f:formElements>
+					<f:FormElement label="{i18n>stamp_duty_id}" id="stamp_duty_id_lbl">
+						<f:fields>
+							<MaskInput width="50%" id="stamp_duty_id_inp" value="{/stamp_duty_id}" mask="9999999999" placeholder="{i18n>stamp_duty_claim}"
+								class="personal-data-form-input"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>stamp_duty_date}" id="stamp_duty_date_lbl">
+						<f:fields>
+							<DatePicker id="PlDate" width="50%"
+								value="{path: '/stamp_duty_date', type : 'sap.ui.model.odata.type.DateTime', constraints : {displayFormat : 'Date'}}"
+								placeholder="{i18n>ph_stamp_duty_date}" class="personal-data-form-input"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+			<f:FormContainer title="{i18n>claimAlso}">
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<FormattedText htmlText="{i18n>claimAlsoText}" width="100%"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+			<f:FormContainer title="{i18n>privacy}">
+				<f:formElements>
+					<f:FormElement>
+						<f:fields>
+							<FormattedText htmlText="{i18n>privacyText}"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>date}">
+						<f:fields>
+							<Input width="50%" id="luogo" value="{/luogo}" class="investimento-form-input"/>
+							<Input width="50%" id="data" value="{/data}" class="investimento-form-input"/>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>signature}">
+						<f:fields>
+							<Input width="50%" id="signature" value="{/signature}" class="investimento-form-input"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+		</f:formContainers>
+	</f:Form>
+</core:FragmentDefinition>
