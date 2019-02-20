@@ -25,77 +25,61 @@ sap.ui.define([
 
 			// set the device model
 			this.setModel(models.createDeviceModel(), "device");
-			//set Mockdata
-			var sPath = "model/mockData/model.json";
-			this.setModel(new sap.ui.model.json.JSONModel(sPath));
-			/*
-						// get WF task data
-						var startupParameters = this.getComponentData().startupParameters;
-						var taskModel = startupParameters.taskModel;
-						var taskData = taskModel.getData();
-						var taskId = taskData.InstanceID;
 
-						// initialize WF model
-						var contextModel = new sap.ui.model.json.JSONModel("/bpmworkflowruntime/rest/v1/task-instances/" + taskId + "/context");
-						contextModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
-						this.setModel(contextModel);
+			// get WF task data ---> solo se richiamato nella inbox
 
-						//add actions
-						startupParameters.inboxAPI.addAction({
-							action: "Confirm",
-							label: "Conferma"
-						}, function (button) {
-							this._completeTask(taskId, true);
-						}, this);
-						startupParameters.inboxAPI.addAction({
-							action: "Save",
-							label: "Salva Bozza"
-						}, function (button) {
-							this._completeTask(taskId, false);
-						}, this);
-			*/
+			this.taskId = null;
+
+			if (this.getComponentData() !== undefined) {
+				var startupParameters = this.getComponentData().startupParameters;
+				var taskModel = startupParameters.taskModel;
+				var taskData = taskModel.getData();
+				this.taskId = taskData.InstanceID;
+				this.instanceId = sap.ui.controller("com.pabz.RichiestaLiquidazione.controller.Main").getInstanceIdFromTask(this.taskId);
+
+				//add actions ---> valido solo nella inbox => andranno aggiunte direttamente nell'applicazione 
+				startupParameters.inboxAPI.addAction({
+					action: "Confirm",
+					label: "Conferma"
+				}, function (button) {
+					sap.ui.controller("com.pabz.RichiestaLiquidazione.controller.Main").onConfirm();
+					this._refreshTask();
+				}, this);
+				startupParameters.inboxAPI.addAction({
+					action: "Save",
+					label: "Salva Bozza"
+				}, function (button) {
+					sap.ui.controller("com.pabz.RichiestaLiquidazione.controller.Main").onSave();
+					this._refreshTask();
+				}, this);
+
+			} else {
+
+				this.instanceId = sap.ui.controller("com.pabz.RichiestaLiquidazione.controller.Main").getInstanceIdParam();
+				this.taskId = sap.ui.controller("com.pabz.RichiestaLiquidazione.controller.Main").getTaskId(this.instanceId);
+
+			}
+
+			// initialize WF model
+
+			if (this.instanceId === null) {
+
+				// creo nuovo wf	
+				var sPath = "model/emptyModel.json";
+				this.setModel(new sap.ui.model.json.JSONModel(sPath));
+
+			} else {
+
+				// carico dati wf 
+				var contextModel = new sap.ui.model.json.JSONModel("/bpmworkflowruntime/rest/v1/task-instances/" + this.taskId + "/context");
+				contextModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
+				this.setModel(contextModel);
+			}
+
 		},
-		/*
-				_completeTask: function (taskId, approvalStatus) {
-					var token = this._fetchToken();
-					var oModel = this.getModel();
-					oModel.setProperty("/confirm", approvalStatus);
 
-					$.ajax({
-						url: "/bpmworkflowruntime/rest/v1/task-instances/" + taskId,
-						method: "PATCH",
-						contentType: "application/json",
-						async: false,
-						data: JSON.stringify({
-							status: "COMPLETED",
-							context: oModel.getData()
-						}),
-						headers: {
-							"X-CSRF-Token": token
-						}
-					});
-					this._refreshTask(taskId);
-				},
-
-				_fetchToken: function () {
-					var token;
-					$.ajax({
-						url: "/bpmworkflowruntime/rest/v1/xsrf-token",
-						method: "GET",
-						async: false,
-						headers: {
-							"X-CSRF-Token": "Fetch"
-						},
-						success: function (result, xhr, data) {
-							token = data.getResponseHeader("X-CSRF-Token");
-						}
-					});
-					return token;
-				},
-
-				_refreshTask: function (taskId) {
-					this.getComponentData().startupParameters.inboxAPI.updateTask("NA", taskId);
-				}
-		*/
+		_refreshTask: function () {
+			this.getComponentData().startupParameters.inboxAPI.updateTask("NA", this.taskId);
+		}
 	});
 });

@@ -1,44 +1,43 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:t="sap.ui.table" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core">
-	<f:Form editable="true" id="investmentForm" width="100%">
+	<f:Form editable="true" id="investmentForm" width="100%" class="investimento-form">
 		<f:layout>
-			<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4"
-				emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+			<f:GridLayout singleColumn="true"/>
 		</f:layout>
 		<f:formContainers>
 			<f:FormContainer>
 				<f:formElements>
 					<f:FormElement>
 						<f:fields>
-							<t:Table rows="{/Settlement}" title="{i18n>SettlementTable}" selectionMode="None">
+							<t:Table rows="{/Settlement}" title="{i18n>SettlementTable}" selectionMode="None" visibleRowCount="{/Settlement}">
 								<t:columns>
 									<t:Column>
-										<Label text="Fornitore/istituto locatore"/>
+										<Label text="Fornitore/Istituto locatore"/>
 										<t:template>
-											<Input value="{fornitore}"/>
+											<Input value="{fornitore}" class="investimento-form-input"/>
 										</t:template>
 									</t:Column>
 									<t:Column>
 										<Label text="Descrizione"/>
 										<t:template>
-											<Input value="{descrizione}"/>
+											<Input value="{descrizione}" class="investimento-form-input"/>
 										</t:template>
 									</t:Column>
 									<t:Column>
-										<Label text="nr. fattura/contratto"/>
+										<Label text="Nr. fattura/contratto"/>
 										<t:template>
-											<Input value="{fattura}"/>
+											<Input value="{fattura}" class="investimento-form-input"/>
 										</t:template>
 									</t:Column>
 									<t:Column>
-										<Label text="data"/>
+										<Label text="Data"/>
 										<t:template>
-											<Input value="{dataS}"/>
+											<DatePicker value="{path: 'dataS', type : 'sap.ui.model.odata.type.DateTime', constraints : {displayFormat : 'Date'}}" placeholder=" "/>
 										</t:template>
 									</t:Column>
 									<t:Column>
 										<Label text="Imponibile Euro"/>
 										<t:template>
-											<Input value="{imponibile}"/>
+											<Input value="{path:'imponibile', type:'sap.ui.model.type.Currency'}" textAlign="Right" class="investimento-form-input"/>
 										</t:template>
 									</t:Column>
 								</t:columns>
