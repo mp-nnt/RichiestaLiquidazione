@@ -227,7 +227,7 @@ sap.ui.define([
 			}
 		},
 
-		onConfirm: function () {
+			onConfirm: function () {
 			this.getView().setBusyIndicatorDelay(0);
 			this.getView().setBusy(true);
 			if (!this.onCheck()) {
@@ -242,7 +242,8 @@ sap.ui.define([
 						onClose: function (sAction) {
 							if (sAction === MessageBox.Action.OK) {
 								this.completeTask(false); //inserire nell'azione in risposta al ok
-								this.requestCreation(); //inserire nell'azione in risposta al ok
+								this.requestCreation(); //richiamo alla funzione in risposta al ok -Batch
+
 							} else {
 								this.getView().setBusy(false);
 								MessageToast.show(this.getView().getModel("i18n").getResourceBundle().getText("OpAnn"));
@@ -255,8 +256,9 @@ sap.ui.define([
 				var msg = this.getView().getModel("i18n").getResourceBundle().getText("MsgErr");
 				MessageToast.show(msg);
 			}
+			},
 
-		},
+		//--------------------------------------------------------------------------------Chiamata servizi crm
 
 		requestCreation: function () {
 
@@ -269,10 +271,37 @@ sap.ui.define([
 				"changeSetId": changeSetId
 			};
 
+			/* OLD
 			var batchSuccess = function (oData) {
 				this.getView().setBusy(false);
 
+			}.bind(this);*/
+
+			//Simona
+			var batchSuccess = function (oData) { //funzioni di successo ed insuccesso legati alla chiamata Batch
+
+				this.getView().setBusy(false);
+				//gestire gli errori da backend, anche se la chiamata è andata a buon fine
+				var response = oData.__batchResponses[0].response;
+				if (response !== undefined) {
+					if (response.statusCode !== '200') { //status 200 è il tipo di errore ricercato
+						var json = JSON.parse(oData.__batchResponses[0].response.body);
+						var oBodyModel = new JSONModel(json);
+						var error = oBodyModel.getData().error.message.value;
+						sap.m.MessageBox.error(error);
+						return;
+					}
+				}
+				//fine gestione errori
+
+				var reqGuid = oData.__batchResponses[0].__changeResponses[0].data.Guid;
+				this.getView().getModel().setProperty("/guid", reqGuid);
+				this.completeTask(true); //completa il task, completa il workflow
+				this._getRequestData(); //legge 
+				this.getView().byId("btn_save").setEnabled(false);
+				this.getView().byId("btn_confirm").setEnabled(false);
 			}.bind(this);
+			//Simona
 
 			var batchError = function (err) {
 				this.getView().setBusy(false);
@@ -288,17 +317,78 @@ sap.ui.define([
 				"success": batchSuccess,
 				"error": batchError
 			});*/
-			this.getView().setBusy(false);
-			sap.m.MessageToast.show("Servizio da implementare");
+
+			/*		OLD
+					this.getView().setBusy(false);
+					sap.m.MessageToast.show("Servizio da implementare");
+				},*/
+
+			// creazione della coda di processo + servizi 
+			this._odataNuovaRichiesta(mParameters); //creazione
+			this._odataPosRichiesta(mParameters); //posizione
+			this._odataDocCreate(mParameters); //allegati
+			oModel.submitChanges({
+				"groupId": changeSetId,
+				//"changeSetId": changeSetId,
+				"success": batchSuccess,
+				"error": batchError
+			});
 		},
 
-		_odataHeaderCreate: function (param) {
+		//mapping di NuovaRichiesta. dati da passare: processType + wfId
+		_odataNuovaRichiesta: function (param) {
 
+			var oModel = this.getView().getModel();
+			var oDataModel = this.getView().getModel("oData");
+			var entity = {};
+			entity["ProcessType"] = "GCL";
+			entity["Guid"] = this.getOwnerComponent().guid; //passa il guid (istanza wf)
+			entity["Zzfld00002x"] = this.getOwnerComponent().instanceId; //passa in backend in valore del wfId
+			oDataModel.create("/nuovaRichiestaSet", entity, param); //crea il collegamento CRM della /nuovaRichiestaSet
 		},
 
-		_odataItemsCreate: function (param) {
+		//mapping di PosRichiesta. gestione della CRM relativa ai dati di input nella scheda "anagrafica"
 
+		_odataPosRichiesta: function (param) {
+
+			var oModel = this.getView().getModel();
+			var oDataModel = this.getView().getModel("oData");
+			var table = oModel.getProperty("/Settlement");
+			var entity;
+			for (var i in table) {
+				if (table[i].importoEuro !== "" && !isNaN(table[i].importoEuro[0])) {
+
+					entity = {};
+					entity["Zzfld00002y"] = table[i].fornitore;
+					entity["Description"] = table[i].descrizione;
+					entity["DataInizio"] = table[i].dataS; //data
+					entity["Importo"] = table[i].imponibile[0].toString(); //imponibile
+					oDataModel.create("/posizioniRichiestaSet", entity, param);
+					//manca il campo relativo a fattura/contratto
+				}
+			}
+
+			var oModel = this.getView().getModel();
+			var oDataModel = this.getView().getModel("oData");
+			var entity = {};
+
+			var listA = oModel.getProperty("/listA");
+
+			for (var i in listA) {
+
+				if (listA[i].importoEuro !== "") {
+					entity = {};
+					//entity[""] = listA[i].tipologia;
+					entity["Importo"] = listA[i].importoEuro[0].toString();
+					//entity[""] = listA[i].numero[0].toString();
+					entity["Description"] = listA[i].descrizione.substring(0, 40);
+					oDataModel.create("/posizioniRichiestaSet", entity, param); //crea il collegamento CRM della /nuovaRichiestaSet
+				}
+
+			}
 		},
+
+		//chiamata al servizio per gli allegati. passare solo quello relativo ai pagamenti
 
 		_odataDocCreate: function (param) {
 			var i;
@@ -320,10 +410,45 @@ sap.ui.define([
 					//entity["Dimensione"] = property[k].fileDimension;
 					//entity["DataCaricamento"] = property[k].fileUploadDate;
 
-					//oDataModel.create("/documentiRichiestaSet", entity, param);
+					oDataModel.create("/documentiRichiestaSet", entity, param);
 				}
 			}
 		},
+
+		//--------------------------------------------------------------------------------Fine Chiamata servizi crm
+
+		_odataHeaderCreate: function (param) {
+
+		},
+
+		_odataItemsCreate: function (param) {
+
+		},
+
+		/*	_odataDocCreate: function (param) {
+				var i;
+				var length = this.ArrayId.length;
+				var oDataModel = this.getView().getModel("oData");
+				var oFileUploaded = this.getView().getModel().getData();
+				for (i = 0; i < length; i++) {
+					var entity;
+					var property = oFileUploaded[this.ArrayId[i]];
+					var tipologia = this.switchTipologia(this.ArrayId[i]);
+					for (var k in property) {
+						entity = {};
+						entity["Tipologia"] = tipologia;
+						entity["Nome"] = property[k].fileName;
+						entity["Mimetype"] = property[k].fileMimeType;
+						entity["Estensione"] = property[k].fileExtension;
+						entity["Content"] = property[k].fileContent;
+						//entity["Description"] = property[k].fileId;
+						//entity["Dimensione"] = property[k].fileDimension;
+						//entity["DataCaricamento"] = property[k].fileUploadDate;
+
+						//oDataModel.create("/documentiRichiestaSet", entity, param);
+					}
+				}
+			},*/
 
 		// ---------------------------------------------------------------------------------- End Azioni Toolbar
 
